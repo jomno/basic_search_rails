@@ -2,33 +2,33 @@ simple search
 ==
 가장 간단한 search 기능 구현
 
-## search 기능 구현 전 세팅 작업
-### bash - scaffold 작업
+## 1. 더미 데이터 작성(실제 사용 시 적용 X)
+* bash - scaffold 작업
 ```bash
 rails g scaffold post title content:text
 ```
-### Gemfile - 가상 데이터 작업 1
+* Gemfile - 가상 데이터 작업 1
 ```ruby
 gem 'faker' #가상 text 생성 gem
 ```
-### db/seeds.rb - 가상 데이터 작업 2
+* db/seeds.rb - 가상 데이터 작업 2
 ```ruby
 # post를 가상의 문장으로 50개 생성하기
 50.times do 
    Post.create(title: Faker::Lorem.word,content: Faker::Lorem.sentence) 
 end
 ```
-### bash - migrate 및 가상 데이터 생성
+* bash - migrate 및 가상 데이터 생성
 ```bash
 rake db:migrate
 rake db:seed
 ```
-### config/route.rb - route 작업
+* config/route.rb - route 작업
 ```ruby
 root 'posts#index'
 ```
-## search 기능 구현
-### app/views/posts/index.html.erb - index에서 검색 창 구현
+## 2. search 기능 구현
+* app/views/posts/index.html.erb - index에서 검색 창 구현
 ```html
 [...]
 <form action='posts' method="GET">
@@ -39,7 +39,7 @@ root 'posts#index'
 [...]
 ```
 여기서 action인 'posts'는 index 액션을 뜻함(.all이 보여지는 page)
-### app/models/post.rb - 검색 기능 구현 1(search 메소드 구현)
+* app/models/post.rb - 검색 기능 구현 1(search 메소드 구현)
 ```ruby
 [...]
 # Post.search(검색할 쿼리)
@@ -49,7 +49,7 @@ end
 [...]
 ```
 title이나 content중 query를 포함한 것(["%%"sql 와일드카드](https://www.w3schools.com/sql/sql_wildcards.asp))을 출력
-### app/controllers/posts_controller.rb - 검색 기능 구현 2(컨트롤러 세팅)
+* app/controllers/posts_controller.rb - 검색 기능 구현 2(컨트롤러 세팅)
 ```ruby
 def index
     if params[:search]
